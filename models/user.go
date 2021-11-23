@@ -7,4 +7,8 @@ type (
 		Email             string `bson:"email" json:"email"`
 		PhoneNumber       string `bson:"phone_number" json:"phone_number"`
 	}
+
+	UserUsecase interface{}
+
+	UserRepository interface{}
 )
