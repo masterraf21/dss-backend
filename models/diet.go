@@ -37,9 +37,13 @@ type (
 	}
 
 	DietUsecase interface {
+		// REE: Resting Enery Expenditure
 		CountREE(gender GENDER, weight float32, height float32, age int) float32
-		CountCA(ree float32, af ACTIVITY_FACTOR) float32
-		CountDCR(ca float32, dietType DietType) float32
+		// CE: Calorie Expenditure
+		CountCE(ree float32, af ACTIVITY_FACTOR) float32
+		// DCR: Daily Calorie Recommendation
+		CountDCR(ce float32, dietType DietType) float32
+		FindMenu(dcr float32, duration int)
 	}
 
 	DietRepository interface{}

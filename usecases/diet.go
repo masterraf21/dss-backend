@@ -28,7 +28,7 @@ func (u *dietUsecase) CountREE(
 	return
 }
 
-func (u *dietUsecase) CountCA(ree float32, af models.ACTIVITY_FACTOR) (result float32) {
+func (u *dietUsecase) CountCE(ree float32, af models.ACTIVITY_FACTOR) (result float32) {
 	switch af {
 	case models.SEDENTARY:
 		result = ree * 1.2
@@ -45,12 +45,12 @@ func (u *dietUsecase) CountCA(ree float32, af models.ACTIVITY_FACTOR) (result fl
 	return
 }
 
-func (u *dietUsecase) CountDCR(ca float32, dietType models.DietType) (result float32) {
+func (u *dietUsecase) CountDCR(ce float32, dietType models.DietType) (result float32) {
 	switch dietType.Operation {
 	case models.MINUS:
-		result = ca - dietType.Amount
+		result = ce - dietType.Amount
 	case models.PLUS:
-		result = ca - dietType.Amount
+		result = ce - dietType.Amount
 	}
 	return
 }
