@@ -9,6 +9,7 @@ type (
 		EncryptedPassword string `bson:"encrypted_password" json:"encrypted_password"`
 		Email             string `bson:"email" json:"email"`
 		PhoneNumber       string `bson:"phone_number" json:"phone_number"`
+		OnDiet            bool   `bson:"on_diet" json:"on_diet"`
 	}
 
 	// UserBody struct {
