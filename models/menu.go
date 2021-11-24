@@ -2,6 +2,7 @@ package models
 
 type (
 	Menu struct {
+		ID                uint32       `bson:"id_menu" json:"id_menu"`
 		Name              string       `bson:"name" json:"name"`
 		CalorieCount      float32      `bson:"calorie_count" json:"calorie_count"`
 		Recipe            string       `bson:"recipe" json:"recipe"`

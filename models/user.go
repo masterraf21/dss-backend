@@ -1,7 +1,5 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
-
 type (
 	User struct {
 		ID                uint32 `bson:"id_user" json:"id_user"`
@@ -18,6 +16,10 @@ type (
 	}
 
 	UserRepository interface {
-		Store(user *User) (primitive.ObjectID, error)
+		Store(user *User) (uint32, error)
+		BulkStore(users []User) ([]uint32, error)
+		GetAll() ([]User, error)
+		GetByID(id uint32) (*User, error)
+		UpdateArbitrary(id uint32, key string, value interface{}) error
 	}
 )

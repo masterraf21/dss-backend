@@ -32,6 +32,7 @@ type (
 	}
 
 	DietType struct {
+		ID          uint32                `json:"id_diet_type" bson:"id_diet_type"`
 		Name        string                `json:"name" bson:"name"`
 		Description string                `json:"description" bson:"description"`
 		Operation   CALCULATION_OPERATION `json:"operation" bson:"operation"`
