@@ -54,3 +54,6 @@ func (u *dietUsecase) CountDCR(ce float32, dietType models.DietType) (result flo
 	}
 	return
 }
+
+func (u *dietUsecase) FindMenu(dcr float32, duration int) {
+}

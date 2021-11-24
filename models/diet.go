@@ -25,8 +25,10 @@ const (
 )
 
 type (
-	Diet struct {
-		Name string `json:"name" bson:"name"`
+	DietPlan struct {
+		Type     *DietType     `json:"type" bson:"type"`
+		Duration int           `json:"duration" bson:"duration"`
+		Menu     []MenuPerWeek `json:"menu" bson:"menu"`
 	}
 
 	DietType struct {
@@ -34,6 +36,15 @@ type (
 		Description string                `json:"description" bson:"description"`
 		Operation   CALCULATION_OPERATION `json:"operation" bson:"operation"`
 		Amount      float32               `json:"amount" bson:"amount"`
+	}
+
+	MenuPerWeek struct {
+		MenuPerDays [7]MenuPerDay `json:"menu_per_day" bson:"menu_per_day"`
+	}
+	MenuPerDay struct {
+		First  *Menu `json:"first" bson:"first"`
+		Second *Menu `json:"second" bson:"second"`
+		Third  *Menu `json:"third" bson:"third"`
 	}
 
 	DietUsecase interface {

@@ -125,7 +125,10 @@ func (r *counterRepo) Get(collectionName string, identifier string) (id uint32, 
 	}
 
 	if !contains(names, "counter") {
-		initCollection(ctx, r.Instance)
+		err = initCollection(ctx, r.Instance)
+		if err != nil {
+			return
+		}
 	}
 
 	latest, err := getLatestCounter(ctx, r.Instance)

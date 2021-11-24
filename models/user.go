@@ -9,15 +9,9 @@ type (
 		EncryptedPassword string `bson:"encrypted_password" json:"encrypted_password"`
 		Email             string `bson:"email" json:"email"`
 		PhoneNumber       string `bson:"phone_number" json:"phone_number"`
-		OnDiet            bool   `bson:"on_diet" json:"on_diet"`
+		// OnDiet            bool      `bson:"on_diet" json:"on_diet"`
+		CurrentPlan *DietPlan `bson:"current_plan" json:"current_plan"`
 	}
-
-	// UserBody struct {
-	// 	Username    string `json:"username"`
-	// 	Password    string `json:"encrypted_password"`
-	// 	Email       string `json:"email"`
-	// 	PhoneNumber string `json:"phone_number"`
-	// }
 
 	UserUsecase interface {
 		RegisterUser(user User) (uint32, error)
