@@ -2,19 +2,27 @@ package configs
 
 import (
 	"os"
+	"strconv"
 )
 
 type server struct {
-	Port string
+	Port int
 }
 
 func setupServer() *server {
-	v := server{
-		Port: os.Getenv("PORT"),
+	var port int
+	portEnv := os.Getenv("PORT")
+	portInt, err := strconv.Atoi(portEnv)
+	if err == nil {
+		port = portInt
 	}
 
-	if v.Port == "" {
-		v.Port = "8000"
+	v := server{
+		Port: port,
+	}
+
+	if v.Port == 0 {
+		v.Port = 8080
 	}
 
 	return &v
