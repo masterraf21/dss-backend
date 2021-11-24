@@ -11,13 +11,18 @@ type (
 		CurrentPlan *DietPlan `bson:"current_plan" json:"current_plan"`
 	}
 
+	UserBody struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+
 	UserUsecase interface {
-		RegisterUser(user User) (uint32, error)
+		Register(user User) (uint32, error)
 	}
 
 	UserRepository interface {
 		Store(user *User) (uint32, error)
-		BulkStore(users []User) ([]uint32, error)
+		BulkStore(users []*User) ([]uint32, error)
 		GetAll() ([]User, error)
 		GetByID(id uint32) (*User, error)
 		UpdateArbitrary(id uint32, key string, value interface{}) error

@@ -91,7 +91,32 @@ func (r *userRepo) UpdateArbitrary(id uint32, key string, value interface{}) err
 
 func (r *userRepo) BulkStore(users []*models.User) (res []uint32, err error) {
 	var id uint32
+	var input []interface{}
+
 	res = make([]uint32, 0)
+
+	ctx, cancel := context.WithTimeout(context.Background(), configs.Constant.TimeoutOnSeconds*time.Second)
+	defer cancel()
+
+	collection := r.Instance.Collection(collectionName)
+
+	for i := 0; i < len(users); i++ {
+		id, err = r.CounterRepo.Get(collectionName, identifier)
+		if err != nil {
+			return
+		}
+
+		users[i].ID = id
+	}
+
+	for _, user := range users {
+		input = append(input, user)
+	}
+
+	_, err = collection.InsertMany(ctx, input)
+	if err != nil {
+		return
+	}
 
 	return
 }
