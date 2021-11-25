@@ -13,7 +13,7 @@ type (
 	Menu struct {
 		ID           uint32   `bson:"id_menu" json:"id_menu"`
 		Name         string   `bson:"name" json:"name"`
-		CalorieCount float32  `bson:"calorie_count" json:"calorie_count"`
+		CalorieCount int      `bson:"calorie_count" json:"calorie_count"`
 		Recipe       string   `bson:"recipe" json:"recipe"`
 		Ingredients  []string `bson:"ingredients" json:"ingredients"`
 		PictureURL   string   `bson:"picture_url" json:"picture_urL"`
@@ -22,7 +22,7 @@ type (
 
 	MenuBody struct {
 		Name         string   `json:"name"`
-		CalorieCount float32  `json:"calorie_count"`
+		CalorieCount int      `json:"calorie_count"`
 		Recipe       string   `json:"recipe"`
 		Ingredients  []string `json:"ingredients"`
 		PictureURL   string   `json:"picture_url"`

@@ -67,16 +67,11 @@ type (
 		Age            int             `json:"age"`
 		ActivityFactor ACTIVITY_FACTOR `json:"activity_factor"`
 		DietTypeID     uint32          `json:"diet_type_id"`
+		Duration       int             `json:"duration"`
 	}
 
 	DietUsecase interface {
-		// REE: Resting Enery Expenditure
-		CountREE(gender GENDER, weight float32, height float32, age int) float32
-		// CE: Calorie Expenditure
-		CountCE(ree float32, af ACTIVITY_FACTOR) float32
-		// DCR: Daily Calorie Recommendation
-		CountDCR(ce float32, dietType DietType) float32
-		FindMenu(dcr float32, duration int)
+		FindDietPlan(body DietPlanBody) (*DietPlan, error)
 	}
 
 	DietTypeUsecase interface {

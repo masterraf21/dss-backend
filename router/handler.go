@@ -21,7 +21,7 @@ func NewHandler() *Handler {
 	menuRepo := repoMongo.NewMenuRepo(instance, counterRepo)
 	dietTypeRepo := repoMongo.NewDietTypeRepository(instance, counterRepo)
 
-	dietUsecase := usecases.NewDietUsecase(dietTypeRepo)
+	dietUsecase := usecases.NewDietUsecase(dietTypeRepo, menuRepo)
 	dietTypeUsecase := usecases.NewDietTypeUsecase(dietTypeRepo)
 	menuUsecase := usecases.NewMenuUsecase(menuRepo)
 
