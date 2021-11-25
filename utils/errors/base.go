@@ -22,8 +22,8 @@ type content struct {
 
 // Base Error
 type Base struct {
-	c     content
-	stack string
+	c content
+	// stack string
 }
 
 var serviceName string
@@ -34,9 +34,9 @@ func init() {
 
 // Error getter message
 func (err *Base) Error() string {
-	if err.c.CleanedStack == "" {
-		err.c.CleanedStack = cleanStack(err.stack)
-	}
+	// if err.c.CleanedStack == "" {
+	// 	err.c.CleanedStack = cleanStack(err.stack)
+	// }
 
 	j, _ := json.Marshal(&err.c)
 
@@ -81,7 +81,7 @@ func NewError(
 			Timestamp:    time.Now().UnixNano() / 1000,
 			CleanedStack: "",
 		},
-		stack: string(stack),
+		// stack: string(stack),
 	}
 }
 

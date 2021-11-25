@@ -33,5 +33,12 @@ tidy:
 download:
 	go mod download
 
+docker-dev-up:
+	docker-compose -f docker-compose.dev.yml up -d
+docker-dev-down:
+	docker-compose -f docker-compose.dev.yml down
+docker-dev-stop:
+	docker-compose -f docker-compose.dev.yml stop
+
 mock:
 	@mockery --dir models --all
