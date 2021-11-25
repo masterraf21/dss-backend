@@ -82,15 +82,15 @@ func extractIDCalorie(menus []models.Menu) (res []idCalorie) {
 	for _, menu := range menus {
 		res = append(res, idCalorie{
 			ID:      menu.ID,
-			Calorie: menu.CalorieCount,
+			Calorie: menu.Calorie,
 		})
 	}
 
 	return
 }
 
-func subsetSumRange(input []idCalorie, n int, a int, b int) (res [][3]uint32) {
-	res = make([][3]uint32, 0)
+func subsetSumRange(input []models.Menu, n int, a int, b int) (res [][3]models.Menu) {
+	res = make([][3]models.Menu, 0)
 
 	sort.Slice(input, func(i, j int) bool {
 		return input[i].Calorie < input[j].Calorie
@@ -99,28 +99,26 @@ func subsetSumRange(input []idCalorie, n int, a int, b int) (res [][3]uint32) {
 	for i := 0; i < n-2; i++ {
 		for j := i + 1; j < n-1; j++ {
 			first := input[i].Calorie + input[j].Calorie
-			if (first >= a) && (first <= b) {
-				l := 0
-				r := n - 1
-				for l <= r {
-					m := l + (r-1)/2
-					second := first + input[m].Calorie
-					if second < a {
-						l = m + 1
-					} else if second > b {
-						r = m - 1
-					} else if second >= a {
-						for second <= b {
-							second = first + input[m].Calorie
-							if m != i && m != j {
-								res = append(res, [3]uint32{input[i].ID, input[j].ID, input[m].ID})
-							}
-							m++
+			l := 0
+			r := n - 1
+			for l <= r {
+				m := l + (r-1)/2
+				second := first + input[m].Calorie
+				if second < a {
+					l = m + 1
+				} else if second > b {
+					r = m - 1
+				} else if second >= a {
+					for second <= b {
+						second = first + input[m].Calorie
+						if m != i && m != j {
+							res = append(res, [3]models.Menu{input[i], input[j], input[m]})
 						}
+						m++
 					}
 				}
-
 			}
+
 		}
 	}
 
@@ -141,9 +139,29 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (res *models.DietPl
 		return
 	}
 
-	data := extractIDCalorie(menus)
+	// data := extractIDCalorie(menus)
 
-	planMenuIDs := subsetSumRange(data, len(data), dcrBottom, dcrUpper)
+	planMenusRaw := subsetSumRange(menus, len(menus), dcrBottom, dcrUpper)
+	var planMenus [][3]models.Menu
+
+	if len(planMenusRaw) < duration {
+		padNumber := duration - len(planMenusRaw)
+		planMenus = make([][3]models.Menu, duration)
+		if len(planMenusRaw) > 0 {
+			for i := 0; i < duration; i++ {
+				if i >= len(planMenusRaw) {
+					planMenus[i] = planMenusRaw[i-padNumber]
+				} else {
+					planMenus[i] = planMenusRaw[i]
+				}
+			}
+		}
+	} else {
+		planMenus = make([][3]models.Menu, duration)
+		for i := 0; i < duration; i++ {
+			planMenus[i] = planMenusRaw[i]
+		}
+	}
 
 	return
 }

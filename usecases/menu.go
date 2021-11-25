@@ -35,12 +35,12 @@ func extractLabel(ingredients []models.Ingredient) (res []string) {
 
 func (u *menuUsecase) Create(body models.MenuBody) (res uint32, err error) {
 	menu := models.Menu{
-		Name:         body.Name,
-		CalorieCount: body.CalorieCount,
-		Recipe:       body.Recipe,
-		PictureURL:   body.PictureURL,
-		Ingredients:  body.Ingredients,
-		Labels:       body.Labels,
+		Name:        body.Name,
+		Calorie:     body.Calorie,
+		Recipe:      body.Recipe,
+		PictureURL:  body.PictureURL,
+		Ingredients: body.Ingredients,
+		Labels:      body.Labels,
 	}
 
 	res, err = u.Repo.Store(&menu)
