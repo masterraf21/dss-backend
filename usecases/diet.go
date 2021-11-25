@@ -5,15 +5,15 @@ import (
 )
 
 type dietUsecase struct {
-	dietRepository models.DietRepository
+	dietTypeRepository models.DietTypeRepository
 }
 
 // NewDietUsecase will create usecase
 func NewDietUsecase(
-	drsr models.DietRepository,
+	dtsr models.DietTypeRepository,
 ) models.DietUsecase {
 	return &dietUsecase{
-		dietRepository: drsr,
+		dietTypeRepository: dtsr,
 	}
 }
 

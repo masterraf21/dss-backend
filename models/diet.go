@@ -39,6 +39,13 @@ type (
 		Amount      float32               `json:"amount" bson:"amount"`
 	}
 
+	DietTypeBody struct {
+		Name        string                `json:"name"`
+		Description string                `json:"description"`
+		Operation   CALCULATION_OPERATION `json:"operation"`
+		Amount      float32               `json:"amount"`
+	}
+
 	MenuPerWeek struct {
 		MenuPerDays [7]MenuPerDay `json:"menu_per_day" bson:"menu_per_day"`
 	}
@@ -58,5 +65,19 @@ type (
 		FindMenu(dcr float32, duration int)
 	}
 
-	DietRepository interface{}
+	DietTypeUsecase interface {
+		Create(body DietTypeBody) (uint32, error)
+		GetAll() ([]DietType, error)
+		GetByID(id uint32) (*DietType, error)
+	}
+
+	// DietRepository interface{}
+
+	DietTypeRepository interface {
+		Store(dietType *DietType) (uint32, error)
+		BulkStore(dietTypes []*DietType) ([]uint32, error)
+		GetAll() ([]DietType, error)
+		GetByID(id uint32) (*DietType, error)
+		UpdateArbitrary(id uint32, key string, value interface{}) error
+	}
 )
