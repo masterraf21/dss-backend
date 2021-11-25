@@ -1,0 +1,20 @@
+.DS_Store
+main
+.idea/
+vendor/
+
+## this is binary of the account service
+account
+account.pid
+
+## environment variables
+*.env
+build.sh
+
+## log file
+*.log
+scripts/
+cmds/
+docker_account/
+gin-bin
+*_test.go

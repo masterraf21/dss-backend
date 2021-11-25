@@ -9,7 +9,7 @@ import (
 	"github.com/masterraf21/dss-backend/utils/mongodb"
 )
 
-type Server struct {
+type Handler struct {
 	DietTypeUsecase models.DietTypeUsecase
 	DietUsecase     models.DietUsecase
 	MenuUsecase     models.MenuUsecase
@@ -17,7 +17,7 @@ type Server struct {
 }
 
 // NewServer will create handler
-func NewServer(ctx context.Context) *Server {
+func NewHandler(ctx context.Context) *Handler {
 	instance := mongodb.ConfigureMongo()
 	counterRepo := repoMongo.NewCounterRepo(instance)
 	menuRepo := repoMongo.NewMenuRepo(instance, counterRepo)
@@ -27,7 +27,7 @@ func NewServer(ctx context.Context) *Server {
 	dietTypeUsecase := usecases.NewDietTypeUsecase(dietTypeRepo)
 	menuUsecase := usecases.NewMenuUsecase(menuRepo)
 
-	return &Server{
+	return &Handler{
 		DietTypeUsecase: dietTypeUsecase,
 		DietUsecase:     dietUsecase,
 		MenuUsecase:     menuUsecase,

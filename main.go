@@ -9,13 +9,13 @@ import (
 
 func main() {
 	ctx := context.TODO()
-	server := router.NewServer(ctx)
+	handler := router.NewHandler(ctx)
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		server.Start()
+		handler.HTTPStart()
 	}()
 
 	wg.Wait()

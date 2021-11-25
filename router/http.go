@@ -12,7 +12,7 @@ import (
 	httpUtil "github.com/masterraf21/dss-backend/utils/http"
 )
 
-func (h *Server) Start() *echo.Echo {
+func (h *Handler) HTTPStart() *echo.Echo {
 	e := echo.New()
 	e.Use(
 		// middleware.Logger,
@@ -36,6 +36,12 @@ func (h *Server) Start() *echo.Echo {
 			},
 		).WriteResponse(c)
 	})
+
+	menuRouter := NewMenuRouter(h.MenuUsecase)
+	menuRouter.Mount(e.Group("/menu"))
+
+	dietTypeRouter := NewDietTypeRouter(h.DietTypeUsecase)
+	dietTypeRouter.Mount(e.Group("/diet_type"))
 
 	listenerPort := fmt.Sprintf(":%d", configs.Server.Port)
 	e.Logger.Fatal(e.Start(listenerPort))
