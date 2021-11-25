@@ -12,12 +12,16 @@ type (
 	}
 
 	UserBody struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
+		Username    string `json:"username"`
+		Password    string `json:"password"`
+		Email       string `json:"email"`
+		PhoneNumber string `json:"phone_number"`
 	}
 
 	UserUsecase interface {
-		Register(user User) (uint32, error)
+		Register(body UserBody) (uint32, error)
+		GetByID(id uint32) (*User, error)
+		Login(body UserBody) error
 	}
 
 	UserRepository interface {
@@ -25,6 +29,7 @@ type (
 		BulkStore(users []*User) ([]uint32, error)
 		GetAll() ([]User, error)
 		GetByID(id uint32) (*User, error)
+		GetByUsername(username string) (*User, error)
 		UpdateArbitrary(id uint32, key string, value interface{}) error
 	}
 )

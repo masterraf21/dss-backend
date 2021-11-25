@@ -22,6 +22,7 @@ func NewMenuRouter(mus models.MenuUsecase) *menuRouter {
 
 func (r *menuRouter) Mount(group *echo.Group) {
 	group.POST("", r.CreateMenu)
+	group.POST("/bulk", r.BulkCreate)
 	group.GET("", r.FindMenus)
 	group.GET("/:id", r.FindMenu)
 }
@@ -61,4 +62,18 @@ func (r *menuRouter) CreateMenu(c echo.Context) (err error) {
 	}
 
 	return httpUtil.NewResponse(http.StatusCreated, id).WriteResponse(c)
+}
+
+func (r *menuRouter) BulkCreate(c echo.Context) (err error) {
+	var body []models.MenuBody
+	if err := json.NewDecoder(c.Request().Body).Decode(&body); err != nil {
+		return httpUtil.NewError(echo.ErrBadRequest.Code).WriteError(c, "Error decoding body", err)
+	}
+
+	ids, err := r.MenuUsecase.BulkCreate(body)
+	if err != nil {
+		return httpUtil.NewError(echo.ErrInternalServerError.Code).WriteError(c, "Error bulk creating menu", err)
+	}
+
+	return httpUtil.NewResponse(http.StatusCreated, ids).WriteResponse(c)
 }

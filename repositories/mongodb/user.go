@@ -156,3 +156,25 @@ func (r *userRepo) GetAll() (res []models.User, err error) {
 
 	return
 }
+
+func (r *userRepo) GetByUsername(username string) (res *models.User, err error) {
+	collectionName := "user"
+	// identifier := "id_user"
+
+	collection := r.Instance.Collection(collectionName)
+
+	ctx, cancel := context.WithTimeout(context.Background(), configs.Constant.TimeoutOnSeconds*time.Second)
+	defer cancel()
+
+	err = collection.FindOne(ctx, bson.M{"usernamer": username}).Decode(&res)
+	if err != nil {
+		if strings.Contains(err.Error(), "mongo: no documents") {
+			err = nil
+			return
+		}
+
+		return
+	}
+
+	return
+}

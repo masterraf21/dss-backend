@@ -21,12 +21,12 @@ type (
 	}
 
 	MenuBody struct {
-		Name        string   `json:"name"`
-		Calorie     int      `json:"calorie"`
-		Recipe      string   `json:"recipe"`
-		Ingredients []string `json:"ingredients"`
-		PictureURL  string   `json:"picture_url"`
-		Labels      []string `json:"labels"`
+		Name        string   `json:"name,omitempty"`
+		Calorie     int      `json:"calorie,omitempty"`
+		Recipe      string   `json:"recipe,omitempty"`
+		Ingredients string   `json:"ingredients,omitempty"`
+		PictureURL  string   `json:"picture_url,omitempty"`
+		Labels      []string `json:"labels,omitempty"`
 	}
 
 	Ingredient struct {
@@ -44,6 +44,7 @@ type (
 
 	MenuUsecase interface {
 		Create(body MenuBody) (uint32, error)
+		BulkCreate(bodys []MenuBody) ([]uint32, error)
 		GetAll() ([]Menu, error)
 		GetByID(id uint32) (*Menu, error)
 	}

@@ -44,6 +44,12 @@ func (h *Handler) HTTPStart() *echo.Echo {
 	dietTypeRouter := apis.NewDietTypeRouter(h.DietTypeUsecase)
 	dietTypeRouter.Mount(e.Group("/diet_type"))
 
+	userRouter := apis.NewUserRouter(h.UserUsecase)
+	userRouter.Mount(e.Group("/user"))
+
+	dietRouter := apis.NewDietRouter(h.DietUsecase)
+	dietRouter.Mount(e.Group("/diet"))
+
 	listenerPort := fmt.Sprintf("0.0.0.0:%d", configs.Server.Port)
 	e.Logger.Fatal(e.Start(listenerPort))
 
