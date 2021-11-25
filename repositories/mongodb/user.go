@@ -11,10 +11,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-const (
-	collectionName = "user"
-	identifier     = "id_user"
-)
+const ()
 
 type userRepo struct {
 	Instance    *mongo.Database
@@ -30,6 +27,9 @@ func NewUserRepo(instance *mongo.Database, ctr models.CounterRepository) models.
 }
 
 func (r *userRepo) Store(user *models.User) (id uint32, err error) {
+	collectionName := "user"
+	identifier := "id_user"
+
 	ctx, cancel := context.WithTimeout(context.Background(), configs.Constant.TimeoutOnSeconds*time.Second)
 	defer cancel()
 
@@ -53,6 +53,9 @@ func (r *userRepo) Store(user *models.User) (id uint32, err error) {
 }
 
 func (r *userRepo) GetByID(id uint32) (res *models.User, err error) {
+	collectionName := "user"
+	identifier := "id_user"
+
 	collection := r.Instance.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), configs.Constant.TimeoutOnSeconds*time.Second)
@@ -72,6 +75,9 @@ func (r *userRepo) GetByID(id uint32) (res *models.User, err error) {
 }
 
 func (r *userRepo) UpdateArbitrary(id uint32, key string, value interface{}) error {
+	collectionName := "user"
+	identifier := "id_user"
+
 	collection := r.Instance.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), configs.Constant.TimeoutOnSeconds*time.Second)
@@ -90,6 +96,9 @@ func (r *userRepo) UpdateArbitrary(id uint32, key string, value interface{}) err
 }
 
 func (r *userRepo) BulkStore(users []*models.User) (res []uint32, err error) {
+	collectionName := "user"
+	identifier := "id_user"
+
 	var id uint32
 	var input []interface{}
 
@@ -107,6 +116,7 @@ func (r *userRepo) BulkStore(users []*models.User) (res []uint32, err error) {
 		}
 
 		users[i].ID = id
+		res = append(res, id)
 	}
 
 	for _, user := range users {
@@ -122,6 +132,8 @@ func (r *userRepo) BulkStore(users []*models.User) (res []uint32, err error) {
 }
 
 func (r *userRepo) GetAll() (res []models.User, err error) {
+	collectionName := "user"
+
 	collection := r.Instance.Collection(collectionName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), configs.Constant.TimeoutOnSeconds*time.Second)

@@ -3,6 +3,7 @@ module github.com/masterraf21/dss-backend
 go 1.17
 
 require (
+	github.com/emirpasic/gods v1.12.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/labstack/echo v3.3.10+incompatible

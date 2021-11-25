@@ -11,12 +11,20 @@ type (
 		IngredientsLabels []string     `bson:"ingredients_label" json:"ingredients_label"`
 	}
 
+	MenuBody struct {
+		Name         string       `json:"name"`
+		CalorieCount float32      `json:"calorie_count"`
+		Recipe       string       `json:"recipe"`
+		Ingredients  []Ingredient `json:"ingredients"`
+		PictureURL   string       `json:"picture_urL"`
+	}
+
 	Ingredient struct {
-		Name         string   `bson:"name" json:"name"`
-		Measurement  float32  `bson:"measurement" json:"measurement"`
-		Unit         string   `bson:"unit" json:"unit"`
-		Labels       []*Label `bson:"labels:" json:"labels"`
-		LabelsString []string `bson:"labels_string" json:"labels_string"`
+		Name        string   `bson:"name" json:"name"`
+		Measurement float32  `bson:"measurement" json:"measurement"`
+		Unit        string   `bson:"unit" json:"unit"`
+		Labels      []string `bson:"labels:" json:"labels"`
+		// LabelsString []string `bson:"labels_string" json:"labels_string"`
 	}
 
 	Label struct {
@@ -24,7 +32,17 @@ type (
 		Description string `bson:"description" json:"description"`
 	}
 
-	MenuUsecase interface{}
+	MenuUsecase interface {
+		Create(body MenuBody) (uint32, error)
+		GetAll() ([]Menu, error)
+		GetByID(id uint32) (*Menu, error)
+	}
 
-	MenuRepository interface{}
+	MenuRepository interface {
+		Store(menu *Menu) (uint32, error)
+		BulkStore(menus []*Menu) ([]uint32, error)
+		GetAll() ([]Menu, error)
+		GetByID(id uint32) (*Menu, error)
+		UpdateArbitrary(id uint32, key string, value interface{}) error
+	}
 )
