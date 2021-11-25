@@ -51,6 +51,7 @@ func (r *Response) WriteResponse(
 	// )
 
 	ctx.Response().Header().Add("Access-Control-Expose-Headers", "Content-Length, Content-Range, Date, date")
+	ctx.Response().Header().Add("Content-Type", "application/json")
 	ctx.Response().WriteHeader(r.Code)
 	return json.NewEncoder(ctx.Response()).Encode(r)
 }
@@ -74,6 +75,7 @@ func (r *Response) WriteError(
 	}
 
 	ctx.Response().Header().Add("Access-Control-Expose-Headers", "Content-Length, Content-Range, Date, date")
+	ctx.Response().Header().Add("Content-Type", "application/json")
 	ctx.Response().WriteHeader(r.Code)
 	return json.NewEncoder(ctx.Response()).Encode(r)
 }

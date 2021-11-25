@@ -8,6 +8,7 @@ import (
 
 	"github.com/labstack/echo"
 	em "github.com/labstack/echo/middleware"
+	"github.com/masterraf21/dss-backend/apis"
 	"github.com/masterraf21/dss-backend/configs"
 	httpUtil "github.com/masterraf21/dss-backend/utils/http"
 )
@@ -37,10 +38,10 @@ func (h *Handler) HTTPStart() *echo.Echo {
 		).WriteResponse(c)
 	})
 
-	menuRouter := NewMenuRouter(h.MenuUsecase)
+	menuRouter := apis.NewMenuRouter(h.MenuUsecase)
 	menuRouter.Mount(e.Group("/menu"))
 
-	dietTypeRouter := NewDietTypeRouter(h.DietTypeUsecase)
+	dietTypeRouter := apis.NewDietTypeRouter(h.DietTypeUsecase)
 	dietTypeRouter.Mount(e.Group("/diet_type"))
 
 	listenerPort := fmt.Sprintf(":%d", configs.Server.Port)

@@ -1,4 +1,4 @@
-package router
+package apis
 
 import (
 	"encoding/json"
@@ -24,7 +24,7 @@ func NewDietTypeRouter(dtu models.DietTypeUsecase) *dietTypeRouter {
 func (r *dietTypeRouter) Mount(group *echo.Group) {
 	group.POST("", r.CreateDietType)
 	group.GET("", r.FindDietTypes)
-	group.GET("/", r.FindDietType)
+	group.GET("/:id", r.FindDietType)
 }
 
 func (r *dietTypeRouter) FindDietTypes(c echo.Context) (err error) {

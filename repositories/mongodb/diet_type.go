@@ -116,7 +116,6 @@ func (r *dietTypeRepo) GetByID(id uint32) (res *models.DietType, err error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), configs.Constant.TimeoutOnSeconds*time.Second)
 	defer cancel()
-
 	err = collection.FindOne(ctx, bson.M{identifier: id}).Decode(&res)
 	if err != nil {
 		if strings.Contains(err.Error(), "mongo: no documents") {

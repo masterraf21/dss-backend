@@ -26,9 +26,13 @@ const (
 
 type (
 	DietPlan struct {
-		Type     *DietType     `json:"type" bson:"type"`
-		Duration int           `json:"duration" bson:"duration"`
-		Menu     []MenuPerWeek `json:"menu" bson:"menu"`
+		Type      *DietType    `json:"type" bson:"type"`
+		Duration  int          `json:"duration" bson:"duration"`
+		Weight    float32      `json:"weight" bson:"weight"`
+		StartDate string       `json:"start_date" bson:"start_date"`
+		EndDate   string       `json:"end_date" bson:"end_date"`
+		Menu      []MenuPerDay `json:"menu" bson:"menu"`
+		Calorie   float32
 	}
 
 	DietType struct {
@@ -50,9 +54,19 @@ type (
 		MenuPerDays [7]MenuPerDay `json:"menu_per_day" bson:"menu_per_day"`
 	}
 	MenuPerDay struct {
-		First  *Menu `json:"first" bson:"first"`
-		Second *Menu `json:"second" bson:"second"`
-		Third  *Menu `json:"third" bson:"third"`
+		Date   string `json:"data"`
+		First  *Menu  `json:"first" bson:"first"`
+		Second *Menu  `json:"second" bson:"second"`
+		Third  *Menu  `json:"third" bson:"third"`
+	}
+
+	DietPlanBody struct {
+		Weight         float32         `json:"weight"`
+		Height         float32         `json:"height"`
+		Gender         GENDER          `json:"gender"`
+		Age            int             `json:"age"`
+		ActivityFactor ACTIVITY_FACTOR `json:"activity_factor"`
+		DietTypeID     uint32          `json:"diet_type_id"`
 	}
 
 	DietUsecase interface {

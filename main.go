@@ -8,9 +8,7 @@ import (
 )
 
 func main() {
-	// ctx := context.TODO()
 	handler := router.NewHandler()
-	// handler.HTTPStart()
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)

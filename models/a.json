@@ -1,0 +1,22 @@
+{
+  "type": {},
+  "duration": 3,
+  "weight": 10.1,
+  "start_date": "xx/xx/xx",
+  "end_date": "xx/xx/xx",
+  "menu": [
+    {
+      "date": "12/12/12",
+      "first": {
+        "id": 1,
+        "nama": "lontong kari",
+        "calorie_count": 123,
+        "recipe": "Masukin telor bla bla",
+        "image_url": "http:xxx.xxx"
+      },
+      "second": {},
+      "third": {}
+    }
+  ],
+  "calorie": 11.1
+}

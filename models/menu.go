@@ -1,22 +1,32 @@
 package models
 
+type LABEL string
+
+const (
+	HALAL     LABEL = "halal"
+	VEGAN     LABEL = "vegan"
+	NON_DAIRY LABEL = "non_dairy"
+	NON_NUTS  LABEL = "non_nuts"
+)
+
 type (
 	Menu struct {
-		ID                uint32       `bson:"id_menu" json:"id_menu"`
-		Name              string       `bson:"name" json:"name"`
-		CalorieCount      float32      `bson:"calorie_count" json:"calorie_count"`
-		Recipe            string       `bson:"recipe" json:"recipe"`
-		Ingredients       []Ingredient `bson:"ingredients" json:"ingredients"`
-		PictureURL        string       `bson:"picture_url" json:"picture_urL"`
-		IngredientsLabels []string     `bson:"ingredients_label" json:"ingredients_label"`
+		ID           uint32   `bson:"id_menu" json:"id_menu"`
+		Name         string   `bson:"name" json:"name"`
+		CalorieCount float32  `bson:"calorie_count" json:"calorie_count"`
+		Recipe       string   `bson:"recipe" json:"recipe"`
+		Ingredients  []string `bson:"ingredients" json:"ingredients"`
+		PictureURL   string   `bson:"picture_url" json:"picture_urL"`
+		Labels       []string `bson:"labels" json:"labels"`
 	}
 
 	MenuBody struct {
-		Name         string       `json:"name"`
-		CalorieCount float32      `json:"calorie_count"`
-		Recipe       string       `json:"recipe"`
-		Ingredients  []Ingredient `json:"ingredients"`
-		PictureURL   string       `json:"picture_urL"`
+		Name         string   `json:"name"`
+		CalorieCount float32  `json:"calorie_count"`
+		Recipe       string   `json:"recipe"`
+		Ingredients  []string `json:"ingredients"`
+		PictureURL   string   `json:"picture_url"`
+		Labels       []string `json:"labels"`
 	}
 
 	Ingredient struct {
