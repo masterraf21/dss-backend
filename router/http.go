@@ -28,7 +28,6 @@ func (h *Server) Start() *echo.Echo {
 	e.GET("/info", func(c echo.Context) (err error) {
 		return httpUtil.NewResponse(
 			http.StatusOK,
-			"",
 			map[string]interface{}{
 				"version": configs.Build.Version,
 				"commit":  configs.Build.Commit,
