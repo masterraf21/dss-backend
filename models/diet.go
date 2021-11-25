@@ -31,7 +31,7 @@ type (
 		Weight    float32      `json:"weight" bson:"weight"`
 		StartDate string       `json:"start_date" bson:"start_date"`
 		EndDate   string       `json:"end_date" bson:"end_date"`
-		Menu      []MenuPerDay `json:"menu" bson:"menu"`
+		MenusAll  []MenuPerDay `json:"menu" bson:"menus"`
 		Calorie   float32
 	}
 
@@ -54,10 +54,8 @@ type (
 		MenuPerDays [7]MenuPerDay `json:"menu_per_day" bson:"menu_per_day"`
 	}
 	MenuPerDay struct {
-		Date   string `json:"data"`
-		First  *Menu  `json:"first" bson:"first"`
-		Second *Menu  `json:"second" bson:"second"`
-		Third  *Menu  `json:"third" bson:"third"`
+		Date string    `json:"date" bson:"date"`
+		Menu [][3]Menu `json:"menu" bson:"menu"`
 	}
 
 	DietPlanBody struct {

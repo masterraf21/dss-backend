@@ -100,18 +100,23 @@ func subsetSumRange(input []idCalorie, n int, a int, b int) (res [][3]uint32) {
 		for j := i + 1; j < n-1; j++ {
 			first := input[i].Calorie + input[j].Calorie
 			if (first >= a) && (first <= b) {
-				max := j + 1
-				min := n - 2
-				for min <= max {
-					mid := min + (max-1)/2
-					second := first + input[mid].Calorie
-					if (second >= a) && (second <= b) {
-						res = append(res, [3]uint32{input[i].ID, input[j].ID, input[mid].ID})
-					}
-					if second > b {
-						min = mid + 1
-					} else if second < a {
-						max = mid - 1
+				l := 0
+				r := n - 1
+				for l <= r {
+					m := l + (r-1)/2
+					second := first + input[m].Calorie
+					if second < a {
+						l = m + 1
+					} else if second > b {
+						r = m - 1
+					} else if second >= a {
+						for second <= b {
+							second = first + input[m].Calorie
+							if m != i && m != j {
+								res = append(res, [3]uint32{input[i].ID, input[j].ID, input[m].ID})
+							}
+							m++
+						}
 					}
 				}
 
