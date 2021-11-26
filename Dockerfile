@@ -4,17 +4,18 @@ WORKDIR /app
 
 RUN apk add --no-cache ca-certificates git
 
-COPY go.mod go.sum ./
+COPY go.mod ./
+COPY go.sum ./
 
-RUN go get -u
-RUN go mod tidy
+RUN go mod download
+# RUN go mod tidy
 
 COPY . .
 
 ENV GO111MODULE=on
 # ENV PROJECTNAME account
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
+RUN go build -o main
 
 FROM alpine:latest as final
 
