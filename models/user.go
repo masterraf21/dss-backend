@@ -11,6 +11,13 @@ type (
 		CurrentPlan *DietPlan `bson:"current_plan" json:"current_plan"`
 	}
 
+	LoginRespose struct {
+		Token        string `json:"token"`
+		RefreshToken string `json:"refresh_token"`
+		ExpireIn     int64  `json:"expire_in"`
+		UserID       uint32 `json:"user_id"`
+	}
+
 	UserBody struct {
 		Username    string `json:"username"`
 		Password    string `json:"password"`
@@ -18,10 +25,15 @@ type (
 		PhoneNumber string `json:"phone_number"`
 	}
 
+	LoginBody struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+
 	UserUsecase interface {
 		Register(body UserBody) (uint32, error)
 		GetByID(id uint32) (*User, error)
-		Login(body UserBody) error
+		Login(body LoginBody) (*LoginRespose, error)
 	}
 
 	UserRepository interface {

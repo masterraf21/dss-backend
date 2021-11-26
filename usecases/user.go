@@ -42,9 +42,16 @@ func (u *userUsecase) GetByID(id uint32) (res *models.User, err error) {
 	return
 }
 
-func (u *userUsecase) Login(body models.UserBody) (err error) {
+func (u *userUsecase) Login(body models.LoginBody) (res *models.LoginRespose, err error) {
 	user, err := u.userRepo.GetByUsername(body.Username)
+	if err != nil {
+		err = errors.New("internal_error")
+		return
+	}
+
 	var ok bool
+	var token *authUtil.TokenDetails
+
 	if user != nil {
 		ok, err = authUtil.ComparePassword(user.EncryptedPassword, body.Password)
 		if err != nil {
@@ -54,8 +61,20 @@ func (u *userUsecase) Login(body models.UserBody) (err error) {
 			err = errors.New("Wrong Password")
 			return
 		}
+		token, err = authUtil.CreateToken(user.ID)
+		if err != nil {
+			return
+		}
+
+		res = &models.LoginRespose{
+			Token:        token.AccessToken,
+			RefreshToken: token.RefreshToken,
+			ExpireIn:     token.AtExpires,
+			UserID:       user.ID,
+		}
 	} else {
 		err = errors.New("No username at system")
+		return
 	}
 
 	return

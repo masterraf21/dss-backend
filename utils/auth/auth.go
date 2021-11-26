@@ -29,12 +29,12 @@ type TokenDetails struct {
 
 type jWTClaims struct {
 	jwt.StandardClaims
-	Role string `json:"role"`
-	ID   uint32 `json:"id"`
+	// Role string `json:"role"`
+	ID uint32 `json:"id"`
 }
 
 // CreateToken util for creating jw token
-func CreateToken(role string, id uint32) (*TokenDetails, error) {
+func CreateToken(id uint32) (*TokenDetails, error) {
 	secret := configs.Auth.Secret
 	refreshSecret := configs.Auth.RefreshSecret
 	td := &TokenDetails{}
@@ -50,7 +50,7 @@ func CreateToken(role string, id uint32) (*TokenDetails, error) {
 	atClaims["authorized"] = true
 	atClaims["access_uuid"] = td.AccessUUID
 	atClaims["id"] = id
-	atClaims["role"] = role
+	// atClaims["role"] = role
 	atClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	td.AccessToken, err = at.SignedString([]byte(secret))
@@ -62,7 +62,7 @@ func CreateToken(role string, id uint32) (*TokenDetails, error) {
 	rtClaims := jwt.MapClaims{}
 	rtClaims["refresh_uuid"] = td.RefreshUUID
 	rtClaims["id"] = id
-	rtClaims["role"] = role
+	// rtClaims["role"] = role
 	rtClaims["exp"] = td.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
 	td.RefreshToken, err = rt.SignedString([]byte(refreshSecret))
