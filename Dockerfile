@@ -8,13 +8,15 @@ COPY go.mod ./
 COPY go.sum ./
 
 RUN go mod download
-# RUN go mod tidy
+#RUN go get -u
+RUN go mod tidy
 
 COPY . .
 
 ENV GO111MODULE=on
 # ENV PROJECTNAME account
 
+RUN go mod tidy
 RUN go build -o main
 
 FROM alpine:latest as final
@@ -32,4 +34,5 @@ COPY --from=builder /app/main .
 EXPOSE 8800
 
 ENTRYPOINT [ "./main" ]
+
 
