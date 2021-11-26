@@ -14,7 +14,6 @@ build.sh
 ## log file
 *.log
 scripts/
-cmds/
 docker_account/
 gin-bin
 *_test.go
