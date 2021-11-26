@@ -69,6 +69,10 @@ func (r *menuRouter) BulkCreate(c echo.Context) (err error) {
 	if err := json.NewDecoder(c.Request().Body).Decode(&body); err != nil {
 		return httpUtil.NewError(echo.ErrBadRequest.Code).WriteError(c, "Error decoding body", err)
 	}
+	// fmt.Println(len(body))
+	// for _, bod := range body {
+	// 	fmt.Println(bod.Name)
+	// }
 
 	ids, err := r.MenuUsecase.BulkCreate(body)
 	if err != nil {

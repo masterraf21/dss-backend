@@ -27,7 +27,7 @@ type TokenDetails struct {
 
 func generateAccessToken(user *models.User) (string, time.Time, error) {
 	// Declare the expiration time of the token (1h).
-	expirationTime := time.Now().Add(1 * time.Hour)
+	expirationTime := time.Now().Add(24 * time.Hour)
 
 	return generateToken(user, expirationTime, []byte(configs.Auth.Secret))
 }

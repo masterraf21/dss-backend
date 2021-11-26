@@ -98,7 +98,7 @@ func subsetSumRange(input []models.Menu, n int, a int, b int) (res [][3]models.M
 	sort.Slice(input, func(i, j int) bool {
 		return input[i].Calorie < input[j].Calorie
 	})
-
+	// fmt.Println()
 	for i := 0; i < n-2; i++ {
 		for j := i + 1; j < n-1; j++ {
 			first := input[i].Calorie + input[j].Calorie
@@ -128,7 +128,7 @@ func subsetSumRange(input []models.Menu, n int, a int, b int) (res [][3]models.M
 	return
 }
 
-func (u *dietUsecase) FindDietPlan(body models.DietPlanBody, userID uint32) (res *models.DietPlan, err error) {
+func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (err error) {
 	duration := body.Duration
 	dcr, err := u.FindDCR(body)
 	if err != nil {
@@ -136,11 +136,12 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody, userID uint32) (res
 	}
 	dcrUpper := int(math.Round(float64(dcr))) + 100
 	dcrBottom := int(math.Round(float64(dcr))) - 100
-
+	// fmt.Println("MASUK")
 	menus, err := u.menuRepository.GetAll()
 	if err != nil {
 		return
 	}
+	// fmt.Println(menus)
 
 	// user, err := u.userRepository.GetByID(userID)
 	// if err != nil {
@@ -150,6 +151,7 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody, userID uint32) (res
 	// data := extractIDCalorie(menus)
 
 	planMenusRaw := subsetSumRange(menus, len(menus), dcrBottom, dcrUpper)
+	// fmt.Println(planMenusRaw)
 	var planMenus [][3]models.Menu
 
 	if len(planMenusRaw) < duration {
@@ -176,7 +178,8 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody, userID uint32) (res
 		return
 	}
 
-	menuAll := []models.MenuPerDay{}
+	// menuAll := []models.MenuPerDay{}
+	var menuAll []models.MenuPerDay
 	menuAll = make([]models.MenuPerDay, 0)
 
 	FORMAT := "2006-January-02"
@@ -193,8 +196,10 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody, userID uint32) (res
 		})
 	}
 
+	// fmt.Println(menuAll)
+
 	// err = u.userRepository.UpdateArbitrary(userID,"diet_plan",)
-	err = u.userUsecase.UpdateDietPlan(userID, &models.DietPlan{
+	err = u.userUsecase.UpdateDietPlan(body.UserID, &models.DietPlan{
 		Type:      dietType,
 		Duration:  duration,
 		Weight:    body.Weight,

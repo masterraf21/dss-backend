@@ -3,6 +3,7 @@ package apis
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 	"github.com/masterraf21/dss-backend/middleware"
@@ -34,7 +35,17 @@ func (r *userRouter) FindUsers(c echo.Context) (err error) {
 }
 
 func (r *userRouter) FindUser(c echo.Context) (err error) {
-	return
+	userID, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return httpUtil.NewError(echo.ErrBadRequest.Code).WriteError(c, "Invalid Menu ID", err)
+	}
+
+	data, err := r.userUsecase.GetByID(uint32(userID))
+	if err != nil {
+		return httpUtil.NewError(echo.ErrInternalServerError.Code).WriteError(c, "Error getting user by id", err)
+	}
+
+	return httpUtil.NewResponse(http.StatusOK, data).WriteResponse(c)
 }
 
 func (r *userRouter) Register(c echo.Context) (err error) {

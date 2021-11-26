@@ -70,6 +70,7 @@ func (r *menuRepo) BulkStore(menus []*models.Menu) (res []uint32, err error) {
 		menus[i].ID = id
 		res = append(res, id)
 	}
+	// fmt.Println(menus)
 
 	for _, menu := range menus {
 		input = append(input, menu)

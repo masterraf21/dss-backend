@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/masterraf21/dss-backend/models"
@@ -53,12 +54,13 @@ func (u *menuUsecase) GetByID(id uint32) (res *models.Menu, err error) {
 }
 
 func (u *menuUsecase) BulkCreate(bodys []models.MenuBody) (res []uint32, err error) {
-	var menu models.Menu
+	// var menu models.Menu
 	var menuPtr []*models.Menu
 	menuPtr = make([]*models.Menu, 0)
-
+	// fmt.Println(bodys)
 	for _, body := range bodys {
-		menu = models.Menu{
+		// var menu models.Menu
+		menu := models.Menu{
 			Name:        body.Name,
 			Calorie:     body.Calorie,
 			Recipe:      body.Recipe,
@@ -67,6 +69,12 @@ func (u *menuUsecase) BulkCreate(bodys []models.MenuBody) (res []uint32, err err
 			Labels:      body.Labels,
 		}
 		menuPtr = append(menuPtr, &menu)
+	}
+
+	// fmt.Println(menuPtr)
+
+	for _, p := range menuPtr {
+		fmt.Println(p)
 	}
 
 	res, err = u.Repo.BulkStore(menuPtr)

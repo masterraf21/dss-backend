@@ -64,12 +64,13 @@ type (
 		Gender         GENDER          `json:"gender"`
 		Age            int             `json:"age"`
 		ActivityFactor ACTIVITY_FACTOR `json:"activity_factor"`
-		DietTypeID     uint32          `json:"diet_type_id"`
+		DietTypeID     uint32          `json:"id_diet_type"`
 		Duration       int             `json:"duration"`
+		UserID         uint32          `json:"id_user"`
 	}
 
 	DietUsecase interface {
-		FindDietPlan(body DietPlanBody, id uint32) (*DietPlan, error)
+		FindDietPlan(body DietPlanBody) error
 	}
 
 	DietTypeUsecase interface {
