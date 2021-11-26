@@ -42,3 +42,10 @@ docker-dev-stop:
 
 mock:
 	@mockery --dir models --all
+
+deploy:
+	docker compose  up -d
+stop-server:
+	docker compose stop
+destroy-server:
+	docker compose down

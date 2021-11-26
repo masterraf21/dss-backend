@@ -1,6 +1,15 @@
 version: "3.7"
 
 services:
+  api:
+    build: .
+    container_name: api_prod
+    networks: 
+      - prod
+    env_file:
+      - .env.prod
+    ports:
+      - 8000:8800
   mongo-dev:
     image: "mongo:latest"
     container_name: mongo_prod

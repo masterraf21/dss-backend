@@ -45,6 +45,9 @@ func (u *menuUsecase) Create(body models.MenuBody) (res uint32, err error) {
 
 func (u *menuUsecase) GetAll() (res []models.Menu, err error) {
 	res, err = u.Repo.GetAll()
+	if len(res) > 20 {
+		res = res[:20]
+	}
 	return
 }
 
