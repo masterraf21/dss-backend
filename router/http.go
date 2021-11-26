@@ -24,6 +24,7 @@ func (h *Handler) HTTPStart() *echo.Echo {
 		// helper.Recover(),
 		// ddEcho.Middleware(),
 	)
+
 	e.Debug = os.Getenv("DEBUG") == "1"
 
 	e.GET("/info", func(c echo.Context) (err error) {

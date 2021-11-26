@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
+	"github.com/masterraf21/dss-backend/middleware"
 	"github.com/masterraf21/dss-backend/models"
 	httpUtil "github.com/masterraf21/dss-backend/utils/http"
 )
@@ -21,7 +22,8 @@ func NewUserRouter(usr models.UserUsecase) *userRouter {
 
 func (r *userRouter) Mount(group *echo.Group) {
 	// group.GET("", r.FindUsers)
-	group.GET("/:id", r.FindUser)
+	bearerVerify := middleware.CreateBearerVerify()
+	group.GET("/:id", r.FindUser, bearerVerify)
 	group.POST("/register", r.Register)
 	group.POST("/login", r.Login)
 }

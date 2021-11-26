@@ -16,11 +16,41 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func GenerateAccessToken(user *models.User) (string, time.Time, error) {
+type TokenDetails struct {
+	AccessToken  string
+	RefreshToken string
+	// AccessUUID   string
+	// RefreshUUID  string
+	AtExpires int64
+	RtExpires int64
+}
+
+func generateAccessToken(user *models.User) (string, time.Time, error) {
 	// Declare the expiration time of the token (1h).
 	expirationTime := time.Now().Add(1 * time.Hour)
 
 	return generateToken(user, expirationTime, []byte(configs.Auth.Secret))
+}
+
+func GenerateToken(user *models.User) (token *TokenDetails, err error) {
+	accessToken, expAt, err := generateAccessToken(user)
+	if err != nil {
+		return
+	}
+
+	refreshToken, expRt, err := generateRefreshToken(user)
+	if err != nil {
+		return
+	}
+
+	token = &TokenDetails{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		AtExpires:    expAt.Unix(),
+		RtExpires:    expRt.Unix(),
+	}
+
+	return
 }
 
 // Pay attention to this function. It holds the main JWT token generation logic.
@@ -44,4 +74,11 @@ func generateToken(user *models.User, expirationTime time.Time, secret []byte) (
 	}
 
 	return tokenString, expirationTime, nil
+}
+
+func generateRefreshToken(user *models.User) (string, time.Time, error) {
+	// Declare the expiration time of the token - 24 hours.
+	expirationTime := time.Now().Add(24 * time.Hour)
+
+	return generateToken(user, expirationTime, []byte(configs.Auth.RefreshSecret))
 }

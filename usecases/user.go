@@ -3,6 +3,7 @@ package usecases
 import (
 	"errors"
 
+	"github.com/masterraf21/dss-backend/auth"
 	"github.com/masterraf21/dss-backend/models"
 	authUtil "github.com/masterraf21/dss-backend/utils/auth"
 )
@@ -50,7 +51,7 @@ func (u *userUsecase) Login(body models.LoginBody) (res *models.LoginRespose, er
 	}
 
 	var ok bool
-	var token *authUtil.TokenDetails
+	var token *auth.TokenDetails
 
 	if user != nil {
 		ok, err = authUtil.ComparePassword(user.EncryptedPassword, body.Password)
@@ -61,7 +62,7 @@ func (u *userUsecase) Login(body models.LoginBody) (res *models.LoginRespose, er
 			err = errors.New("Wrong Password")
 			return
 		}
-		token, err = authUtil.CreateToken(user.ID)
+		token, err = auth.GenerateToken(user)
 		if err != nil {
 			return
 		}
