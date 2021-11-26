@@ -5,13 +5,14 @@ WORKDIR /app
 RUN apk add --no-cache ca-certificates git
 
 COPY go.mod go.sum ./
+
 RUN go mod download
 RUN go mod tidy
 
 COPY . .
 
 ENV GO111MODULE=on
-ENV PROJECTNAME account
+# ENV PROJECTNAME account
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
 
@@ -27,7 +28,7 @@ WORKDIR /app
 
 COPY --from=builder /app/main .
 
-EXPOSE 3000
+EXPOSE 8800
 
 ENTRYPOINT [ "./main" ]
 
