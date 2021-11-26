@@ -34,6 +34,7 @@ type (
 		Register(body UserBody) (uint32, error)
 		GetByID(id uint32) (*User, error)
 		Login(body LoginBody) (*LoginRespose, error)
+		UpdateDietPlan(id uint32, plan *DietPlan) error
 	}
 
 	UserRepository interface {

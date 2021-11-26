@@ -80,3 +80,8 @@ func (u *userUsecase) Login(body models.LoginBody) (res *models.LoginRespose, er
 
 	return
 }
+
+func (u *userUsecase) UpdateDietPlan(id uint32, plan *models.DietPlan) error {
+	err := u.userRepo.UpdateArbitrary(id, "diet_plan", plan)
+	return err
+}

@@ -3,6 +3,7 @@ package usecases
 import (
 	"math"
 	"sort"
+	"time"
 
 	"github.com/masterraf21/dss-backend/models"
 )
@@ -10,15 +11,17 @@ import (
 type dietUsecase struct {
 	dietTypeRepository models.DietTypeRepository
 	menuRepository     models.MenuRepository
+	userUsecase        models.UserUsecase
 }
 
 // NewDietUsecase will create usecase
 func NewDietUsecase(
-	dtsr models.DietTypeRepository, mr models.MenuRepository,
+	dtsr models.DietTypeRepository, mr models.MenuRepository, usr models.UserUsecase,
 ) models.DietUsecase {
 	return &dietUsecase{
 		dietTypeRepository: dtsr,
 		menuRepository:     mr,
+		userUsecase:        usr,
 	}
 }
 
@@ -125,7 +128,7 @@ func subsetSumRange(input []models.Menu, n int, a int, b int) (res [][3]models.M
 	return
 }
 
-func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (res *models.DietPlan, err error) {
+func (u *dietUsecase) FindDietPlan(body models.DietPlanBody, userID uint32) (res *models.DietPlan, err error) {
 	duration := body.Duration
 	dcr, err := u.FindDCR(body)
 	if err != nil {
@@ -138,6 +141,11 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (res *models.DietPl
 	if err != nil {
 		return
 	}
+
+	// user, err := u.userRepository.GetByID(userID)
+	// if err != nil {
+	// 	return
+	// }
 
 	// data := extractIDCalorie(menus)
 
@@ -162,6 +170,38 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (res *models.DietPl
 			planMenus[i] = planMenusRaw[i]
 		}
 	}
+
+	dietType, err := u.dietTypeRepository.GetByID(body.DietTypeID)
+	if err != nil {
+		return
+	}
+
+	menuAll := []models.MenuPerDay{}
+	menuAll = make([]models.MenuPerDay, 0)
+
+	FORMAT := "2006-January-02"
+	now := time.Now().Local()
+	startDate := now.Format(FORMAT)
+	endDate := now.Add(time.Hour * time.Duration(24*duration)).Format(FORMAT)
+
+	for i := 0; i < len(planMenus); i++ {
+		dayPlus := now.Add(time.Hour * time.Duration(24*i))
+		date := dayPlus.Format(FORMAT)
+		menuAll = append(menuAll, models.MenuPerDay{
+			Date: date,
+			Menu: planMenus[i],
+		})
+	}
+
+	// err = u.userRepository.UpdateArbitrary(userID,"diet_plan",)
+	err = u.userUsecase.UpdateDietPlan(userID, &models.DietPlan{
+		Type:      dietType,
+		Duration:  duration,
+		Weight:    body.Weight,
+		StartDate: startDate,
+		EndDate:   endDate,
+		MenusAll:  menuAll,
+	})
 
 	return
 }

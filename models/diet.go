@@ -54,8 +54,8 @@ type (
 		MenuPerDays [7]MenuPerDay `json:"menu_per_day" bson:"menu_per_day"`
 	}
 	MenuPerDay struct {
-		Date string    `json:"date" bson:"date"`
-		Menu [][3]Menu `json:"menu" bson:"menu"`
+		Date string  `json:"date" bson:"date"`
+		Menu [3]Menu `json:"menu" bson:"menu"`
 	}
 
 	DietPlanBody struct {
@@ -69,7 +69,7 @@ type (
 	}
 
 	DietUsecase interface {
-		FindDietPlan(body DietPlanBody) (*DietPlan, error)
+		FindDietPlan(body DietPlanBody, id uint32) (*DietPlan, error)
 	}
 
 	DietTypeUsecase interface {
