@@ -59,9 +59,7 @@ func (r *userRouter) Register(c echo.Context) (err error) {
 		return httpUtil.NewError(echo.ErrInternalServerError.Code).WriteError(c, "Error Creating User", err)
 	}
 
-	httpUtil.NewResponse(http.StatusCreated, res).WriteResponse(c)
-
-	return
+	return httpUtil.NewResponse(http.StatusCreated, res).WriteResponse(c)
 }
 
 func (r *userRouter) Login(c echo.Context) (err error) {

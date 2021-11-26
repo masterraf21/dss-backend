@@ -8,7 +8,7 @@ type (
 		Email             string `bson:"email" json:"email"`
 		PhoneNumber       string `bson:"phone_number" json:"phone_number"`
 		// OnDiet            bool      `bson:"on_diet" json:"on_diet"`
-		CurrentPlan *DietPlan `bson:"current_plan" json:"current_plan"`
+		CurrentPlan *DietPlan `bson:"diet_plan" json:"diet_plan"`
 	}
 
 	LoginRespose struct {

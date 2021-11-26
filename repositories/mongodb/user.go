@@ -70,6 +70,7 @@ func (r *userRepo) GetByID(id uint32) (res *models.User, err error) {
 
 		return
 	}
+	// fmt.Println(res)
 
 	return
 }

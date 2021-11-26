@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"errors"
+	"fmt"
 	"math"
 	"sort"
 	"time"
@@ -25,7 +27,7 @@ func NewDietUsecase(
 	}
 }
 
-func (u *dietUsecase) CountREE(
+func countREE(
 	gender models.GENDER, weight float32, height float32, age int) (result float32) {
 	if gender == models.FEMALE {
 		result = 655.1 + 13.8*weight + 5.0*height - 6.8*float32(age)
@@ -36,7 +38,7 @@ func (u *dietUsecase) CountREE(
 	return
 }
 
-func (u *dietUsecase) CountCE(ree float32, af models.ACTIVITY_FACTOR) (result float32) {
+func countCE(ree float32, af models.ACTIVITY_FACTOR) (result float32) {
 	switch af {
 	case models.SEDENTARY:
 		result = ree * 1.2
@@ -53,7 +55,8 @@ func (u *dietUsecase) CountCE(ree float32, af models.ACTIVITY_FACTOR) (result fl
 	return
 }
 
-func (u *dietUsecase) CountDCR(ce float32, dietType *models.DietType) (result float32) {
+func countDCR(ce float32, dietType *models.DietType) (result float32) {
+	// fmt.Println(dietType)
 	switch dietType.Operation {
 	case models.MINUS:
 		result = ce - dietType.Amount
@@ -63,14 +66,18 @@ func (u *dietUsecase) CountDCR(ce float32, dietType *models.DietType) (result fl
 	return
 }
 
-func (u *dietUsecase) FindDCR(body models.DietPlanBody) (dcr float32, err error) {
+func (u *dietUsecase) findDCR(body models.DietPlanBody) (dcr float32, err error) {
 	dietType, err := u.dietTypeRepository.GetByID(body.DietTypeID)
 	if err != nil {
 		return
 	}
-	ree := u.CountREE(body.Gender, body.Weight, body.Height, body.Age)
-	ce := u.CountCE(ree, body.ActivityFactor)
-	dcr = u.CountDCR(ce, dietType)
+	if dietType == nil {
+		err = errors.New("Diet Type not available")
+		return
+	}
+	ree := countREE(body.Gender, body.Weight, body.Height, body.Age)
+	ce := countCE(ree, body.ActivityFactor)
+	dcr = countDCR(ce, dietType)
 
 	return
 }
@@ -92,7 +99,7 @@ func extractIDCalorie(menus []models.Menu) (res []idCalorie) {
 	return
 }
 
-func subsetSumRange(input []models.Menu, n int, a int, b int) (res [][3]models.Menu) {
+func subsetSumRangex(input []models.Menu, n int, a int, b int) (res [][3]models.Menu) {
 	res = make([][3]models.Menu, 0)
 
 	sort.Slice(input, func(i, j int) bool {
@@ -105,14 +112,18 @@ func subsetSumRange(input []models.Menu, n int, a int, b int) (res [][3]models.M
 			l := 0
 			r := n - 1
 			for l <= r {
-				m := l + (r-1)/2
+				m := l + (r-l)/2
+				// fmt.Printf("l: %d r:%d m: %d\n", l, r, m)
+
 				second := first + input[m].Calorie
 				if second < a {
 					l = m + 1
 				} else if second > b {
 					r = m - 1
 				} else if second >= a {
-					for second <= b {
+					fmt.Println("MASUK")
+					for second <= b && m < n {
+						fmt.Printf("m: %d r: %d l: %d\n", m, r, l)
 						second = first + input[m].Calorie
 						if m != i && m != j {
 							res = append(res, [3]models.Menu{input[i], input[j], input[m]})
@@ -120,6 +131,7 @@ func subsetSumRange(input []models.Menu, n int, a int, b int) (res [][3]models.M
 						m++
 					}
 				}
+
 			}
 
 		}
@@ -128,9 +140,26 @@ func subsetSumRange(input []models.Menu, n int, a int, b int) (res [][3]models.M
 	return
 }
 
+func subsetSumRange(inp []models.Menu, n int, a int, b int) (res [][3]models.Menu) {
+	res = make([][3]models.Menu, 0)
+
+	for i := 0; i < n-2; i++ {
+		for j := i + 1; j < n-1; j++ {
+			for k := j + 1; k < n-2; k++ {
+				cc := inp[i].Calorie + inp[j].Calorie + inp[k].Calorie
+				if (cc >= a) && (cc <= b) {
+					res = append(res, [3]models.Menu{inp[i], inp[j], inp[k]})
+				}
+			}
+		}
+	}
+
+	return
+}
+
 func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (err error) {
 	duration := body.Duration
-	dcr, err := u.FindDCR(body)
+	dcr, err := u.findDCR(body)
 	if err != nil {
 		return
 	}
@@ -141,17 +170,10 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (err error) {
 	if err != nil {
 		return
 	}
-	// fmt.Println(menus)
 
-	// user, err := u.userRepository.GetByID(userID)
-	// if err != nil {
-	// 	return
-	// }
-
-	// data := extractIDCalorie(menus)
-
+	// fmt.Printf("Upper DCR: %d", dcrUpper)
+	// fmt.Printf("Lower DCR: %d", dcrBottom)
 	planMenusRaw := subsetSumRange(menus, len(menus), dcrBottom, dcrUpper)
-	// fmt.Println(planMenusRaw)
 	var planMenus [][3]models.Menu
 
 	if len(planMenusRaw) < duration {
@@ -178,7 +200,6 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (err error) {
 		return
 	}
 
-	// menuAll := []models.MenuPerDay{}
 	var menuAll []models.MenuPerDay
 	menuAll = make([]models.MenuPerDay, 0)
 
@@ -196,17 +217,16 @@ func (u *dietUsecase) FindDietPlan(body models.DietPlanBody) (err error) {
 		})
 	}
 
-	// fmt.Println(menuAll)
-
-	// err = u.userRepository.UpdateArbitrary(userID,"diet_plan",)
-	err = u.userUsecase.UpdateDietPlan(body.UserID, &models.DietPlan{
+	dietPlan := models.DietPlan{
 		Type:      dietType,
 		Duration:  duration,
 		Weight:    body.Weight,
 		StartDate: startDate,
 		EndDate:   endDate,
 		MenusAll:  menuAll,
-	})
+	}
+
+	err = u.userUsecase.UpdateDietPlan(body.UserID, &dietPlan)
 
 	return
 }
