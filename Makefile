@@ -43,6 +43,8 @@ docker-dev-stop:
 mock:
 	@mockery --dir models --all
 
+redeploy:
+	docker compose up -d --no-deps --build api
 deploy:
 	docker compose  up -d
 stop-server:
