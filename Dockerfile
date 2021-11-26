@@ -6,13 +6,14 @@ RUN apk add --no-cache ca-certificates git
 
 COPY go.mod go.sum ./
 RUN go mod download
+RUN go mod tidy
 
 COPY . .
 
 ENV GO111MODULE=on
 ENV PROJECTNAME account
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
 
 FROM alpine:latest as final
 
