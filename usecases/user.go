@@ -50,6 +50,7 @@ func (u *userUsecase) Login(body models.LoginBody) (res *models.LoginRespose, er
 		return
 	}
 
+	// fmt.Println("%v\n", user)
 	var ok bool
 	var token *auth.TokenDetails
 

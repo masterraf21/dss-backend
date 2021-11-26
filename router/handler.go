@@ -20,8 +20,10 @@ func NewHandler() *Handler {
 	counterRepo := repoMongo.NewCounterRepo(instance)
 	menuRepo := repoMongo.NewMenuRepo(instance, counterRepo)
 	dietTypeRepo := repoMongo.NewDietTypeRepository(instance, counterRepo)
+	userRepo := repoMongo.NewUserRepo(instance, counterRepo)
 
-	dietUsecase := usecases.NewDietUsecase(dietTypeRepo, menuRepo)
+	userUsecase := usecases.NewUserUsecase(userRepo)
+	dietUsecase := usecases.NewDietUsecase(dietTypeRepo, menuRepo, userUsecase)
 	dietTypeUsecase := usecases.NewDietTypeUsecase(dietTypeRepo)
 	menuUsecase := usecases.NewMenuUsecase(menuRepo)
 
@@ -29,5 +31,6 @@ func NewHandler() *Handler {
 		DietTypeUsecase: dietTypeUsecase,
 		DietUsecase:     dietUsecase,
 		MenuUsecase:     menuUsecase,
+		UserUsecase:     userUsecase,
 	}
 }
