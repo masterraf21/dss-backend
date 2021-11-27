@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/masterraf21/dss-backend/middleware"
 	"github.com/masterraf21/dss-backend/models"
 	httpUtil "github.com/masterraf21/dss-backend/utils/http"
 )
@@ -21,10 +20,10 @@ func NewDietRouter(dtr models.DietUsecase) *dietRouter {
 }
 
 func (r *dietRouter) Mount(group *echo.Group) {
-	bearerVerify := middleware.CreateBearerVerify()
+	// bearerVerify := middleware.CreateBearerVerify()
 
-	group.GET("/test", r.Test, bearerVerify)
-	group.POST("", r.FindDiet, bearerVerify)
+	// group.GET("/test", r.Test, bearerVerify)
+	group.POST("", r.FindDiet)
 }
 
 func (r *dietRouter) FindDiet(c echo.Context) (err error) {
